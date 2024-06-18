@@ -3,10 +3,10 @@
 
 spring:
   datasource:
-    driver-class-name: dm.jdbc.driver.DmDriver
-    url: jdbc:dm://192.168.160.112:5236/ZUIYU
-    username: ZUIYU
-    password: 1234567890
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test
+    username: root
+    password: 123456
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
   configuration:
@@ -14,7 +14,7 @@ mybatis-plus:
 
 encrypt:
   # DB/ES
-  type: ES
+  type: DB
   # DB
   dbChunk: 2
   esUrl: 127.0.0.1:9200

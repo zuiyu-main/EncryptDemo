@@ -1,6 +1,12 @@
 package com.zuiyu.encryptdemo.encry.service;
 
 
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import com.zuiyu.encryptdemo.encry.bean.Dept;
+import com.zuiyu.encryptdemo.encry.bean.User;
+import com.zuiyu.encryptdemo.encry.bean.UserVo;
+import com.zuiyu.encryptdemo.encry.dao.TestDmDao;
+import com.zuiyu.encryptdemo.encry.dao.UserMapper;
 import com.zuiyu.encryptdemo.encry.util.AESEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +32,9 @@ public class TestService {
     @Autowired
     private IndexService indexService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public void put(String text) throws Exception {
         log.info("put,text:[{}]",text);
         List<String> chunks = keywordService.keyword(text);
@@ -39,20 +48,30 @@ public class TestService {
         indexService.index(str.toString());
     }
     public Object get(String text) throws Exception {
-        log.info("get text :[{}]",text);
-        List<String> chunks = keywordService.keyword(text);
-        log.info("get,text chunks size :[{}]",chunks.size());
-        // 公钥加密，私钥解密
-        StringBuilder str = new StringBuilder();
-        for (String chunk : chunks) {
-            str.append(AESEncryption.encrypt(chunk));
-        }
-        log.info("get text :[{}]",str);
-        Object search = indexService.search(str.toString());
-        log.info("search result:[{}]",search);
-        return search;
+        test();
+//        log.info("get text :[{}]",text);
+//        List<String> chunks = keywordService.keyword(text);
+//        log.info("get,text chunks size :[{}]",chunks.size());
+//        // 公钥加密，私钥解密
+//        StringBuilder str = new StringBuilder();
+//        for (String chunk : chunks) {
+//            str.append(AESEncryption.encrypt(chunk));
+//        }
+//        log.info("get text :[{}]",str);
+//        Object search = indexService.search(str.toString());
+//        log.info("search result:[{}]",search);
+        return "search";
     }
 
+    public void test(){
+        List<UserVo> r = userMapper.selectJoinList(UserVo.class, new MPJLambdaWrapper<User>()
+                .selectAll(User.class)
+                 .eq(User::getAge, "18")
+                .selectAssociation(Dept.class, UserVo::getDept)
+                .leftJoin(Dept.class, Dept::getId,User::getDeptId));
+
+        System.out.println(r);
+    }
 
 
 }

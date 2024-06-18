@@ -4,10 +4,10 @@
 <mapper namespace="com.zuiyu.encryptdemo.encry.dao.TestDmDao">
 
     <select id="getAll"  resultType="java.util.Map">
-        select * from TABLE_1 t limit 1
+        select * from users t limit 1
     </select>
     <select id="likeQuery" resultType="java.util.Map">
-        select * from TABLE_1 where CONTENT LIKE CONCAT('%',#{text}, '%')
+        select * from users where CONTENT LIKE CONCAT('%',#{text}, '%')
     </select>
 
 </mapper>

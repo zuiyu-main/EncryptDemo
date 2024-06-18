@@ -1,5 +1,6 @@
 package com.zuiyu.encryptdemo.encry.dao;
 
+import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Mapper
 @Repository
-public interface TestDmDao {
+public interface TestDmDao<T>  extends MPJBaseMapper<T> {
     /**
      * 达梦数据库联通测试
      * @return
