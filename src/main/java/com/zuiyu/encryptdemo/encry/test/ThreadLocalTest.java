@@ -11,7 +11,7 @@ import lombok.SneakyThrows;
  * @date 2024/6/25 13:51
  */
 public class ThreadLocalTest implements Runnable{
-//    public static ThreadLocal<String> MAIN_THREAD_LOCAL = ThreadLocal.withInitial(() -> "parent thread value: zuiyu java");
+//    public static ThreadLocal<String> MAIN_THREAD_LOCAL = ThreadLocal.withInitial(() -> "父线程的值 withInitial 111");
     private static final InheritableThreadLocal<String> MAIN_THREAD_LOCAL = new InheritableThreadLocal<>();
     @SneakyThrows
     @Override
@@ -28,12 +28,13 @@ public class ThreadLocalTest implements Runnable{
     }
     public static void main(String[] args) {
         ThreadLocalTest threadLocalTest = new ThreadLocalTest();
-        MAIN_THREAD_LOCAL.set("父线程");
+        MAIN_THREAD_LOCAL.set("父线程的值 set 111");
         System.out.println("启动:"+threadLocalTest.get());
         for (int i = 0; i < 3; i++) {
-            new Thread(threadLocalTest).start();
-//            ThreadUtil.execAsync(threadLocalTest);
+//            new Thread(threadLocalTest).start();
+            ThreadUtil.execAsync(threadLocalTest);
         }
         System.out.println("结束："+threadLocalTest.get());
+        threadLocalTest.clean();
     }
 }
