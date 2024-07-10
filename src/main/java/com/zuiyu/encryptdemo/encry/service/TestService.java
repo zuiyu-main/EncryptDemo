@@ -1,19 +1,20 @@
 package com.zuiyu.encryptdemo.encry.service;
 
 
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import com.zuiyu.encryptdemo.encry.bean.Dept;
 import com.zuiyu.encryptdemo.encry.bean.User;
-import com.zuiyu.encryptdemo.encry.bean.UserVo;
-import com.zuiyu.encryptdemo.encry.dao.TestDmDao;
 import com.zuiyu.encryptdemo.encry.dao.UserMapper;
-import com.zuiyu.encryptdemo.encry.util.AESEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * @author create by zuiyu,github https://github.com/zuiyu-main
@@ -22,56 +23,52 @@ import java.util.List;
  * @date 2024/4/16 10:16
  */
 @Service
+
 public class TestService {
     public final Logger log = LoggerFactory.getLogger(getClass());
 
 
-    @Autowired
-    private KeywordService keywordService;
-
-    @Autowired
-    private IndexService indexService;
 
     @Autowired
     private UserMapper userMapper;
 
+    @Transactional
     public void put(String text) throws Exception {
-        log.info("put,text:[{}]",text);
-        List<String> chunks = keywordService.keyword(text);
-        log.info("put,text chunks size :[{}]",chunks.size());
-        StringBuilder str = new StringBuilder();
-        for (String chunk : chunks) {
-            String aes = AESEncryption.encrypt(chunk);
-            str.append(aes);
-        }
-        log.info("index text :[{}]",str);
-        indexService.index(str.toString());
-    }
-    public Object get(String text) throws Exception {
-        test();
-//        log.info("get text :[{}]",text);
-//        List<String> chunks = keywordService.keyword(text);
-//        log.info("get,text chunks size :[{}]",chunks.size());
-//        // 公钥加密，私钥解密
-//        StringBuilder str = new StringBuilder();
-//        for (String chunk : chunks) {
-//            str.append(AESEncryption.encrypt(chunk));
-//        }
-//        log.info("get text :[{}]",str);
-//        Object search = indexService.search(str.toString());
-//        log.info("search result:[{}]",search);
-        return "search";
-    }
 
-    public void test(){
-        List<UserVo> r = userMapper.selectJoinList(UserVo.class, new MPJLambdaWrapper<User>()
-                .selectAll(User.class)
-                 .eq(User::getAge, "18")
-                .selectAssociation(Dept.class, UserVo::getDept)
-                .leftJoin(Dept.class, Dept::getId,User::getDeptId));
-
-        System.out.println(r);
+        User user = new User();
+        user.setName("zuiyu");
+        user.setAge(18);
+        user.setDeptId(1);
+        userMapper.insert(user);
+        int a = 22/0;
     }
 
 
+    public Object get(String text) {
+
+        return null;
+    }
+
+//    @Bean("zuiyuThreadPool")
+//    public Executor zuiyuThreadPool(){
+//        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+//        threadPoolTaskExecutor.setCorePoolSize(8);
+//        threadPoolTaskExecutor.setMaxPoolSize(16);
+//        threadPoolTaskExecutor.setQueueCapacity(100);
+//        threadPoolTaskExecutor.setKeepAliveSeconds(60);
+//        threadPoolTaskExecutor.setThreadNamePrefix("zuiyuThreadPool-");
+//        threadPoolTaskExecutor.initialize();
+//        return threadPoolTaskExecutor;
+//    }
+
+//    @Async("zuiyuThreadPool")
+//    public CompletableFuture<String> async(){
+//        log.info("异步线程消息输出:{}",Thread.currentThread().getName());
+//        return CompletableFuture.completedFuture("zuiyu-java");
+//    }
+//    @Async("zuiyuThreadPool")
+//    @Async
+public void async(){
+    log.info("异步线程消息输出:{}",Thread.currentThread().getName());
+}
 }

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * @author create by zuiyu,github https://github.com/zuiyu-main
  * @classname TestController
@@ -20,10 +22,15 @@ public class TestController {
     @GetMapping("/put")
     public Object put(String text) throws Exception {
         testService.put(text);
-        return ";;";
+        return "success";
     }
     @GetMapping("/get")
     public Object get(String text) throws Exception {
         return testService.get(text);
+    }
+    @GetMapping("/async")
+    public Object async() throws Exception {
+       testService.async();
+        return "success";
     }
 }
