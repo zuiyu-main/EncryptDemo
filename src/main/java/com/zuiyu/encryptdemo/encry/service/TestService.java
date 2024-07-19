@@ -1,7 +1,9 @@
 package com.zuiyu.encryptdemo.encry.service;
 
 
+import com.zuiyu.encryptdemo.encry.bean.Dept;
 import com.zuiyu.encryptdemo.encry.bean.User;
+import com.zuiyu.encryptdemo.encry.dao.DeptMapper;
 import com.zuiyu.encryptdemo.encry.dao.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +29,11 @@ public class TestService {
     public final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private DeptMapper deptMapper;
     @Autowired
     private Test2Service test2Service;
-    @Transactional
+    @Async
     public void test(){
         log.info("TestService 方法执行，执行线程:{}",Thread.currentThread().getName());
         User user = new User();
@@ -38,8 +41,22 @@ public class TestService {
         user.setAge(18);
         user.setDeptId(1);
         userMapper.insert(user);
-        test2Service.test2();
+        test2();
+        int a = 22/0;
+    }
 
+    @Transactional
+    public void test2(){
+        log.info("Test2Service 异步方法执行，执行线程:{}",Thread.currentThread().getName());
+        User user = new User();
+        user.setName("zuiyu Test2Service");
+        user.setAge(18);
+        user.setDeptId(1);
+        userMapper.insert(user);
+        Dept dept = new Dept();
+        dept.setId(1);
+        dept.setName("dept2");
+        deptMapper.insert(dept);
         int a = 22/0;
     }
 
