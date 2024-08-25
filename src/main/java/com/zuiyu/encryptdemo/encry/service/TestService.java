@@ -1,8 +1,7 @@
 package com.zuiyu.encryptdemo.encry.service;
 
 
-import com.zuiyu.encryptdemo.encry.bean.User;
-import com.zuiyu.encryptdemo.encry.dao.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
 /**
@@ -23,52 +22,30 @@ import java.util.concurrent.Executor;
  * @date 2024/4/16 10:16
  */
 @Service
-
 public class TestService {
     public final Logger log = LoggerFactory.getLogger(getClass());
-
-
-
     @Autowired
-    private UserMapper userMapper;
+    private Test2Service test2Service;
+    public void method1(){
+        Runnable parentTask = (()->{
+            log.info("父任务，parentTask");
+            CountDownLatch latch = new CountDownLatch(3);
+            for (int i = 0; i < 3; i++) {
+                test2Service.childTask(latch);
+            }
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            log.info("父任务，parentTask 完成");
 
-    @Transactional
-    public void put(String text) throws Exception {
+        });
+       BizThreadPool.submit(parentTask);
 
-        User user = new User();
-        user.setName("zuiyu");
-        user.setAge(18);
-        user.setDeptId(1);
-        userMapper.insert(user);
-        int a = 22/0;
     }
 
-
-    public Object get(String text) {
-
-        return null;
+    public void printThreadPoolStatus() {
+        BizThreadPool.printThreadPoolStatus();
     }
-
-//    @Bean("zuiyuThreadPool")
-//    public Executor zuiyuThreadPool(){
-//        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-//        threadPoolTaskExecutor.setCorePoolSize(8);
-//        threadPoolTaskExecutor.setMaxPoolSize(16);
-//        threadPoolTaskExecutor.setQueueCapacity(100);
-//        threadPoolTaskExecutor.setKeepAliveSeconds(60);
-//        threadPoolTaskExecutor.setThreadNamePrefix("zuiyuThreadPool-");
-//        threadPoolTaskExecutor.initialize();
-//        return threadPoolTaskExecutor;
-//    }
-
-//    @Async("zuiyuThreadPool")
-//    public CompletableFuture<String> async(){
-//        log.info("异步线程消息输出:{}",Thread.currentThread().getName());
-//        return CompletableFuture.completedFuture("zuiyu-java");
-//    }
-//    @Async("zuiyuThreadPool")
-//    @Async
-public void async(){
-    log.info("异步线程消息输出:{}",Thread.currentThread().getName());
-}
 }

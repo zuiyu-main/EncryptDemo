@@ -19,18 +19,14 @@ import java.util.concurrent.CompletableFuture;
 public class TestController {
     @Autowired
     private TestService testService;
-    @GetMapping("/put")
-    public Object put(String text) throws Exception {
-        testService.put(text);
+    @GetMapping("/test")
+    public Object put() throws Exception {
+        testService.method1();
         return "success";
     }
-    @GetMapping("/get")
-    public Object get(String text) throws Exception {
-        return testService.get(text);
-    }
-    @GetMapping("/async")
-    public Object async() throws Exception {
-       testService.async();
+    @GetMapping("/info")
+    public Object get() throws Exception {
+        testService.printThreadPoolStatus();
         return "success";
     }
 }
