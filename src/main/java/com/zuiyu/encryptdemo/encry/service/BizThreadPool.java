@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 public class BizThreadPool {
 
     public static final ExecutorService executor =
-            new ThreadPoolExecutor(1,1,
+            new ThreadPoolExecutor(10,10,
                     60, TimeUnit.MILLISECONDS,
                     new LinkedBlockingQueue<>());
     public static final ExecutorService childThreadPool =

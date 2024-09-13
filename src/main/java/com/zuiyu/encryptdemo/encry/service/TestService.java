@@ -28,18 +28,20 @@ public class TestService {
     private Test2Service test2Service;
     public void method1(){
         Runnable parentTask = (()->{
-            log.info("父任务，parentTask");
-            CountDownLatch latch = new CountDownLatch(3);
-            for (int i = 0; i < 3; i++) {
-                test2Service.childTask(latch);
-            }
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            log.info("父任务，parentTask 完成");
+//            log.info("父任务，parentTask");
+//            CountDownLatch latch = new CountDownLatch(3);
+//            for (int i = 0; i < 3; i++) {
+//                test2Service.childTask(latch);
+//            }
+//            try {
+//                latch.await();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            log.info("父任务，parentTask 完成");
+            System.out.println(TenantContextHolder.getTenantId());
 
+//            TenantContextHolder.clear();
         });
        BizThreadPool.submit(parentTask);
 
