@@ -20,8 +20,8 @@ public class TestController {
     @Autowired
     private TestService testService;
     @GetMapping("/test")
-    public Object put() throws Exception {
-        testService.method1();
+    public Object put(Long tenantId) throws Exception {
+        testService.method1(tenantId);
         return "success";
     }
     @GetMapping("/info")

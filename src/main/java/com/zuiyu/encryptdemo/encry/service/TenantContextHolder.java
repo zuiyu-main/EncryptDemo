@@ -14,11 +14,11 @@ public class TenantContextHolder {
     private static final ThreadLocal<Long> TENANT_ID = new TransmittableThreadLocal<>();
 
     public static Long getTenantId() {
-        log.info("读取请求租户ID:[{}]",Thread.currentThread().getName());
+//        log.info("读取请求租户ID:[{}]",Thread.currentThread().getName());
         return TENANT_ID.get();
     }
     public static void setTenantId(Long tenantId) {
-        log.info("设置请求租户ID:[{}:{}]",Thread.currentThread().getName(),tenantId);
+//        log.info("设置请求租户ID:[{}:{}]",Thread.currentThread().getName(),tenantId);
         TENANT_ID.set(tenantId);
     }
     public static void clear() {

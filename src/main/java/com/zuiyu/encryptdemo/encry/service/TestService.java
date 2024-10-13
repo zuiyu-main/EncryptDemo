@@ -26,25 +26,25 @@ public class TestService {
     public final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private Test2Service test2Service;
-    public void method1(){
-        Runnable parentTask = (()->{
-//            log.info("父任务，parentTask");
-//            CountDownLatch latch = new CountDownLatch(3);
-//            for (int i = 0; i < 3; i++) {
-//                test2Service.childTask(latch);
-//            }
-//            try {
-//                latch.await();
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//            log.info("父任务，parentTask 完成");
-            System.out.println(TenantContextHolder.getTenantId());
+    public void method1(Long tenantId){
+        if (TenantContextHolder.getTenantId() == null){
 
-//            TenantContextHolder.clear();
+        }
+        TenantContextHolder.setTenantId(tenantId);
+        log.info("主线程设置租户ID为：{}",tenantId);
+        Runnable parentTask = (()->{
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+
+            }
+            log.info("子线程读取租户信息:[{}]",TenantContextHolder.getTenantId());
         });
+
        BizThreadPool.submit(parentTask);
 
+       TenantContextHolder.clear();
+       log.info("主线程读取租户值:[{}]",TenantContextHolder.getTenantId());
     }
 
     public void printThreadPoolStatus() {
